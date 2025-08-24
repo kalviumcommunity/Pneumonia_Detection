@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Pneumonia Detection System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <h1 class="header-title">
+                    <svg class="header-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5Z"/>
+                        <path d="M12 5L8 21l4-7 4 7-4-16"/>
+                    </svg>
+                    AI Pneumonia Detection System
+                </h1>
+                <p class="header-subtitle">Advanced chest X-ray analysis using artificial intelligence</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <!-- Medical Disclaimer -->
+            <div class="disclaimer-banner">
+                <div class="disclaimer-content">
+                    <svg class="disclaimer-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M12 8v4"/>
+                        <path d="M12 16h.01"/>
+                    </svg>
+                    <p><strong>Medical Disclaimer:</strong> This AI tool is for educational purposes only and should not replace professional medical diagnosis. Always consult qualified healthcare professionals for medical decisions.</p>
+                </div>
+            </div>
+
+            <div class="app-layout">
+                <!-- Upload Section -->
+                <section class="upload-section card">
+                    <div class="card__body">
+                        <h2 class="section-title">Upload Chest X-ray Image</h2>
+                        
+                        <!-- File Input (Hidden) -->
+                        <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp" style="display: none;">
+                        
+                        <!-- Upload Area -->
+                        <div class="upload-area" id="uploadArea">
+                            <div class="upload-content" id="uploadContent">
+                                <svg class="upload-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="17 8 12 3 7 8"/>
+                                    <line x1="12" y1="3" x2="12" y2="15"/>
+                                </svg>
+                                <h3>Drop your X-ray image here</h3>
+                                <p>or <button type="button" class="upload-btn" id="uploadBtn">browse files</button></p>
+                                <small>Supports JPEG, PNG, WebP • Max size: 10MB</small>
+                            </div>
+                        </div>
+
+                        <!-- Image Preview -->
+                        <div class="image-preview hidden" id="imagePreview">
+                            <div class="preview-header">
+                                <h3>Uploaded Image</h3>
+                                <button type="button" class="btn btn--sm btn--outline" id="clearImageBtn">Clear Image</button>
+                            </div>
+                            <div class="preview-container">
+                                <img id="previewImage" alt="X-ray preview" style="max-width: 100%; height: auto;">
+                                <div class="image-info" id="imageInfo"></div>
+                            </div>
+                        </div>
+
+                        <!-- Analysis Controls -->
+                        <div class="analysis-controls hidden" id="analysisControls">
+                            <div class="form-group">
+                                <label class="form-label" for="promptType">Analysis Type (RTFC Framework)</label>
+                                <select class="form-control" id="promptType">
+                                    <option value="zero_shot">Standard Analysis (Zero-shot RTFC)</option>
+                                    <option value="one_shot">Enhanced Detection (One-shot RTFC)</option>
+                                    <option value="few_shot">Comprehensive Scan (Few-shot RTFC)</option>
+                                    <option value="chain_of_thought">Step-by-step Analysis (CoT RTFC)</option>
+                                    <option value="dynamic">Adaptive Analysis (Dynamic RTFC)</option>
+                                </select>
+                                <small class="form-help">Each option uses the RTFC framework: Role, Task, Format, and Context for optimal AI interaction</small>
+                            </div>
+
+                            <!-- Advanced Settings -->
+                            <details class="advanced-settings">
+                                <summary>Advanced AI Settings</summary>
+                                <div class="settings-grid">
+                                    <div class="form-group">
+                                        <label class="form-label" for="temperature">Temperature: <span id="temperatureValue">0.3</span></label>
+                                        <input type="range" id="temperature" min="0.1" max="1.0" step="0.1" value="0.3" class="slider">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="apiKey">API Key</label>
+                                        <input type="password" id="apiKey" class="form-control" placeholder="Enter Gemini API Key" value="AIzaSyBKDFyflc-Chesroe1iUBmzwF4MRMxpFgU">
+                                    </div>
+                                </div>
+                            </details>
+
+                            <div class="form-group">
+                                <button type="button" class="btn btn--primary btn--full-width" id="analyzeBtn">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M9 12l2 2 4-4"/>
+                                        <path d="M21 12c-1 0-3-1-3-3s2-3 3-3 3 1 3 3-2 3-3 3"/>
+                                        <path d="M3 12c1 0 3-1 3-3s-2-3-3-3-3 1-3 3 2 3 3 3"/>
+                                        <path d="M12 21c0-1 1-3 3-3s3 2 3 3-1 3-3 3-3-2-3-3"/>
+                                        <path d="M12 3c0 1-1 3-3 3s-3-2-3-3 1-3 3-3 3 2 3 3"/>
+                                    </svg>
+                                    Analyze X-ray
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Results Section -->
+                <section class="results-section">
+                    <!-- Loading State -->
+                    <div class="loading-card card hidden" id="loadingCard">
+                        <div class="card__body">
+                            <div class="loading-content">
+                                <div class="spinner"></div>
+                                <h3>Analyzing X-ray Image</h3>
+                                <p>Our AI is examining the chest X-ray for signs of pneumonia...</p>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="progressFill"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Results Display -->
+                    <div class="results-card card hidden" id="resultsCard">
+                        <div class="card__header">
+                            <h2>Analysis Results</h2>
+                            <div class="result-timestamp" id="resultTimestamp"></div>
+                        </div>
+                        <div class="card__body">
+                            <div class="result-summary" id="resultSummary">
+                                <!-- Dynamic content will be inserted here -->
+                            </div>
+                            
+                            <div class="result-details" id="resultDetails">
+                                <!-- Detailed analysis will be inserted here -->
+                            </div>
+
+                            <div class="result-actions">
+                                <button type="button" class="btn btn--primary" id="analyzeAnotherBtn">Analyze Another Image</button>
+                                <button type="button" class="btn btn--outline" id="downloadResultsBtn">Download Results</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Error Display -->
+                    <div class="error-card card hidden" id="errorCard">
+                        <div class="card__body">
+                            <div class="error-content">
+                                <svg class="error-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <line x1="15" y1="9" x2="9" y2="15"/>
+                                    <line x1="9" y1="9" x2="15" y2="15"/>
+                                </svg>
+                                <h3>Analysis Failed</h3>
+                                <p id="errorMessage">An error occurred during analysis. Please try again.</p>
+                                <button type="button" class="btn btn--primary" id="retryBtn">Try Again</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Educational Section -->
+                <section class="info-section">
+                    <div class="info-grid">
+                        <div class="info-card card">
+                            <div class="card__body">
+                                <h3>About Pneumonia</h3>
+                                <p>Pneumonia is an infection that inflames air sacs in one or both lungs. The air sacs may fill with fluid or pus, causing symptoms like cough, fever, chills, and difficulty breathing.</p>
+                                <ul>
+                                    <li>Can be caused by bacteria, viruses, or fungi</li>
+                                    <li>Symptoms include fever, chills, and shortness of breath</li>
+                                    <li>Early detection improves treatment outcomes</li>
+                                    <li>X-rays help identify lung inflammation and fluid</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="info-card card">
+                            <div class="card__body">
+                                <h3>AI Detection Process</h3>
+                                <p>Our AI model analyzes chest X-rays using advanced computer vision techniques to identify potential signs of pneumonia.</p>
+                                <ul>
+                                    <li>Trained on thousands of medical images</li>
+                                    <li>Looks for opacity, consolidation, and inflammation</li>
+                                    <li>Provides confidence scores for transparency</li>
+                                    <li>Multiple analysis techniques available</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="info-card card">
+                            <div class="card__body">
+                                <h3>How to Use</h3>
+                                <ol>
+                                    <li>Upload a clear chest X-ray image</li>
+                                    <li>Select your preferred analysis type</li>
+                                    <li>Click "Analyze X-ray" to start</li>
+                                    <li>Review the AI's assessment</li>
+                                    <li>Download or save your results</li>
+                                </ol>
+                                <p><small><strong>Remember:</strong> This tool is educational only. Always consult medical professionals for diagnosis.</small></p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2025 AI Pneumonia Detection System. Educational use only.</p>
+                <div class="footer-links">
+                    <a href="#" target="_blank">Privacy Policy</a>
+                    <a href="#" target="_blank">Terms of Service</a>
+                    <a href="#" target="_blank">Contact Support</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
